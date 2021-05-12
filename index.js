@@ -15,11 +15,10 @@ const usersRoutes = require("./routes/usersRoutes");
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.json());
 app.use(cors());
 
 //  ROUTES
-app.use("/api/v1/users", usersRoutes);
+app.use("/api/v1/products", usersRoutes);
 
 app.use("*", (req, res, next) => {
   res.status(404).json({

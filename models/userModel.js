@@ -45,15 +45,15 @@ const jobDetailSchema = new mongoose.Schema({
 const userSchema = mongoose.Schema({
   firstName: {
     type: String,
-    required: true
+    required: true,
   },
   lastName: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
-    required: true
+    required: true,
     unique: true,
     lowercase: true,
   },
