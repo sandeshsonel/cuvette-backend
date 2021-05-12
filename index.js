@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 //  ROUTES
-app.use("/api/v1/products", usersRoutes);
+app.use("/api/v1/users", usersRoutes);
 
 app.use("*", (req, res, next) => {
   res.status(404).json({
