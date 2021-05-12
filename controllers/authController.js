@@ -66,8 +66,6 @@ exports.login = async (req, res, next) => {
     }
     const correct = await user.correctPassword(password, user.password);
 
-    console.log({ correct });
-
     if (!correct) {
       return res.status(401).json({
         status: "0",
@@ -84,8 +82,9 @@ exports.login = async (req, res, next) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        dateOfBirth: user.dateOfBirth,
-        mostlyInterested: user.mostlyInterested,
+        photo: user.photo,
+        phoneNumber: user.phoneNumber,
+        jobDetails: user.jobDetails,
       },
     });
   } catch (err) {
