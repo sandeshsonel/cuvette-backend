@@ -1,28 +1,30 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const morgan = require("morgan");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-dotenv.config({ path: "./config.env" });
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+dotenv.config({ path: './config.env' });
 
 const DB = process.env.DATABASE;
 const PORT = process.env.PORT || 8000;
 
-const usersRoutes = require("./routes/usersRoutes");
+const usersRoutes = require('./routes/usersRoutes');
+const jobsRoutes = require('./routes/jobsRoutes');
 
-app.use(morgan("dev"));
+app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
 //  ROUTES
-app.use("/api/v1/users", usersRoutes);
+app.use('/api/v1/users', usersRoutes);
+app.use('/api/v1/jobs', jobsRoutes);
 
-app.use("*", (req, res, next) => {
+app.use('*', (req, res, next) => {
   res.status(404).json({
-    status: "fail",
+    status: 'fail',
     message: `Can't find ${req.originalUrl} on this server!`,
   });
 });
@@ -34,10 +36,10 @@ mongoose
     useUnifiedTopology: true,
   })
   .then((con) => {
-    console.log("Database Connection Successfully..");
+    console.log('Database Connection Successfully..');
   })
   .catch((err) => {
-    console.log("Database Connection Failed");
+    console.log('Database Connection Failed');
   });
 
 app.listen(PORT, () => {
