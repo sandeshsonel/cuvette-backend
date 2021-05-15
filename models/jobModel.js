@@ -37,8 +37,8 @@ const jobDetailSchema = new mongoose.Schema(
       default: null,
     },
     jobSkills: {
-      type: [String],
-      default: [],
+      type: String,
+      default: null,
     },
   },
   {
