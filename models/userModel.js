@@ -1,51 +1,57 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const Schema = mongoose.Schema;
 
-const userSchema = mongoose.Schema({
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-  },
-  phoneNumber: {
-    type: String,
-  },
-  photo: {
-    type: String,
-    default: null,
-  },
-  userType: {
-    type: String,
-    // enum: ['student', 'emloyer'],
-    // required: [true, "A user must have User Type"],
-  },
-  password: {
-    type: String,
-    required: [true, 'Please provide a password'],
-    // minLength: 8,
-    select: false,
-  },
-  confirmPassword: {
-    type: String,
-    required: [true, 'Please confirm your password'],
-    validate: {
-      // works on save document
-      validator: function (el) {
-        return el === this.password;
+const userSchema = new mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+    },
+    phoneNumber: {
+      type: String,
+    },
+    photo: {
+      type: String,
+      default: null,
+    },
+    userType: {
+      type: String,
+      // enum: ['student', 'emloyer'],
+      // required: [true, "A user must have User Type"],
+    },
+    password: {
+      type: String,
+      // required: [true, 'Please provide a password'],
+      // minLength: 8,
+      select: false,
+    },
+    confirmPassword: {
+      type: String,
+      // required: [true, 'Please confirm your password'],
+      validate: {
+        // works on save document
+        validator: function (el) {
+          return el === this.password;
+        },
+        message: 'Passwords are not the same.',
       },
-      message: 'Passwords are not the same.',
     },
   },
-});
+  {
+    strict: false,
+  }
+);
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next;

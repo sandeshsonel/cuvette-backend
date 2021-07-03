@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 
 const ObjectId = mongoose.Types.ObjectId;
+const Schema = mongoose.Schema;
 
 const signToken = (id) => {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -21,20 +22,32 @@ exports.signup = async (req, res, next) => {
         message: 'You already register, Please login',
       });
     } else {
-      const newUser = await User.create(req.body);
+      let userObj = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        phoneNumber: req.body.phoneNumber,
+        email: req.body.email,
+        password: req.body.password,
+        confirmPassword: req.body.confirmPassword,
+        userType: req.body.userType,
+      };
+      if (req.body.userType === 'employer') {
+        userObj.companyName = req.body.companyName;
+      }
+      console.log('user', userObj);
+      // const userCollectionSchema = new Schema({}, { strict: false });
+      // const UserCollection = mongoose.model('users', userCollectionSchema);
+      // const userCollectionData = new UserCollection(userObj);
+      // await userCollectionData.save();
+      // console.log({ newUser });
+      const newUser = await User.create(userObj);
+      console.log({ newUser });
 
       const token = signToken(newUser._id);
       res.status(201).json({
         status: '1',
         token,
-        data: {
-          firstName: newUser.firstName,
-          lastName: newUser.lastName,
-          email: newUser.email,
-          phoneNumber: newUser.phoneNumber,
-          jobDetails: newUser.jobDetails,
-          userType: newUser.userType,
-        },
+        data: newUser,
         message: 'User Created Successfully',
       });
     }

@@ -1,33 +1,48 @@
 const mongoose = require('mongoose');
 const User = require('../models/userModel');
 const Jobs = require('../models/jobModel');
+const CompanyJobs = require('../models/companyJobModel');
 
 const ObjectId = mongoose.Types.ObjectId;
 
 exports.getAllJobs = async (req, res, next) => {
+  console.log(req.query);
   try {
-    try {
-      const jobsList = await Jobs.find({ userId: req.user._id });
+    // const jobsList = await Jobs.find({ userId: req.user._id });
 
-      if (jobsList.length) {
-        res.status(200).json({
-          status: '1',
-          results: jobsList[0].jobs.length,
-          data: jobsList[0].jobs,
-        });
-      } else {
-        res.status(200).json({
-          status: '1',
-          data: [],
-          message: 'No Jobs',
-        });
-      }
-    } catch (err) {
-      res.status(500).json({
-        status: '0',
+    const companyJobs = await CompanyJobs.find();
+    if (companyJobs) {
+      const companyJobArray = companyJobs.map(
+        (comp) => comp.companyJobsDetails
+      );
+      console.log(companyJobArray);
+      return res.status(201).json({
+        status: '1',
+        results: companyJobArray.length,
+        data: companyJobArray,
       });
     }
-  } catch (error) {}
+    console.log({ companyJobs });
+
+    // if (jobsList.length) {
+    //   res.status(200).json({
+    //     status: '1',
+    //     results: jobsList[0].jobs.length,
+    //     data: jobsList[0].jobs,
+    //   });
+    // } else {
+    //   res.status(200).json({
+    //     status: '1',
+    //     data: [],
+    //     message: 'No Jobs',
+    //   });
+    // }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      status: '0',
+    });
+  }
 };
 
 exports.getJob = (req, res, next) => {

@@ -6,7 +6,7 @@ const router = express.Router();
 
 router
   .route('/')
-  .all(authController.protect)
+  // .all(authController.protect)
   .get(jobsController.getAllJobs)
   .post(jobsController.addNewJob)
   .delete(jobsController.deleteJob)

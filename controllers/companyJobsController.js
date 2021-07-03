@@ -5,14 +5,17 @@ const ObjectId = mongoose.Types.ObjectId;
 
 exports.getAllCompanyJobs = async (req, res, next) => {
   try {
+    console.log(req.user._id);
     const companyJobs = await CompanyJobs.find({
       userId: Object(req.user._id),
     });
+    console.log(companyJobs);
     return res.status(200).json({
       status: '1',
-      data: companyJobs,
+      data: companyJobs.length ? companyJobs[0].companyJobsDetails : [],
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       status: '0',
       message: error,
@@ -43,6 +46,7 @@ exports.getCompanyJob = async (req, res, next) => {
 
 exports.addCompanyJob = async (req, res, next) => {
   try {
+    console.log(req.body);
     const companyUser = await CompanyJobs.find({
       userId: ObjectId(req.user._id),
     });
@@ -119,9 +123,13 @@ exports.deleteCompanyJob = async (req, res, next) => {
       { userId: req.user._id },
       { $pull: { companyJobsDetails: { _id: companyJobId } } }
     );
+    const companyJobs = await CompanyJobs.find({
+      userId: Object(req.user._id),
+    });
     return res.status(201).json({
       status: '1',
       message: 'Company Job Deleted',
+      data: companyJobs[0].companyJobsDetails,
     });
   } catch (error) {
     console.log(error);
