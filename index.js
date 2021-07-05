@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 8000;
 const usersRoutes = require('./routes/usersRoutes');
 const jobsRoutes = require('./routes/jobsRoutes');
 const companyJobsRoutes = require('./routes/companyJobsRoutes');
+const saveJobsRoutes = require('./routes/saveJobsRoutes');
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -23,6 +24,7 @@ app.use(cors());
 app.use('/api/v1/users', usersRoutes);
 app.use('/api/v1/jobs', jobsRoutes);
 app.use('/api/v1/companyJobs', companyJobsRoutes);
+app.use('/api/v1/savedJobs', saveJobsRoutes);
 
 app.use('*', (req, res, next) => {
   res.status(404).json({

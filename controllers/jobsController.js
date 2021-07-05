@@ -10,19 +10,22 @@ exports.getAllJobs = async (req, res, next) => {
   try {
     // const jobsList = await Jobs.find({ userId: req.user._id });
 
-    const companyJobs = await CompanyJobs.find();
+    const companyJobs = await CompanyJobs.aggregate([
+      { $unwind: '$companyJobsDetails' },
+    ]);
+    console.log('xoxo-----------------------', companyJobs);
     if (companyJobs) {
-      const companyJobArray = companyJobs.map(
-        (comp) => comp.companyJobsDetails
-      );
-      console.log(companyJobArray);
+      // const companyJobArray = companyJobs.map(
+      //   (comp) => comp.companyJobsDetails
+      // );
+      // console.log(companyJobArray);
       return res.status(201).json({
         status: '1',
-        results: companyJobArray.length,
-        data: companyJobArray,
+        results: companyJobs.length,
+        data: companyJobs,
       });
     }
-    console.log({ companyJobs });
+    // console.log({ companyJobs });
 
     // if (jobsList.length) {
     //   res.status(200).json({
