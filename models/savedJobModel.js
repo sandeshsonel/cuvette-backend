@@ -3,9 +3,11 @@ const mongoose = require('mongoose');
 const companyJobs = new mongoose.Schema({
   companyId: {
     type: mongoose.Types.ObjectId,
+    required: [true],
   },
   companyJobId: {
     type: mongoose.Types.ObjectId,
+    required: [true],
   },
 });
 

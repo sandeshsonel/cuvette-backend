@@ -14,7 +14,6 @@ const signToken = (id) => {
 
 exports.signup = async (req, res, next) => {
   try {
-    console.log(req.body);
     const alreadyUser = await User.find({ email: req.body.email });
     if (alreadyUser.length) {
       return res.status(200).json({
@@ -34,14 +33,7 @@ exports.signup = async (req, res, next) => {
       if (req.body.userType === 'employer') {
         userObj.companyName = req.body.companyName;
       }
-      console.log('user', userObj);
-      // const userCollectionSchema = new Schema({}, { strict: false });
-      // const UserCollection = mongoose.model('users', userCollectionSchema);
-      // const userCollectionData = new UserCollection(userObj);
-      // await userCollectionData.save();
-      // console.log({ newUser });
       const newUser = await User.create(userObj);
-      console.log({ newUser });
 
       const token = signToken(newUser._id);
       res.status(201).json({
@@ -90,19 +82,19 @@ exports.login = async (req, res, next) => {
 
     const token = signToken(user._id);
 
-    console.log(user);
+    const userObj = JSON.parse(JSON.stringify(user));
 
     return res.status(200).json({
       status: '1',
       token,
       data: {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        photo: user.photo,
-        phoneNumber: user.phoneNumber,
-        jobDetails: user.jobDetails,
-        userType: user.userType,
+        firstName: userObj.firstName,
+        lastName: userObj.lastName,
+        email: userObj.email,
+        photo: userObj.photo,
+        phoneNumber: userObj.phoneNumber,
+        companyName: userObj.companyName,
+        userType: userObj.userType,
       },
     });
   } catch (err) {
